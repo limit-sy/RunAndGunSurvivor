@@ -106,5 +106,7 @@ Assets/Sounds
 Assets/Fonts
 Assets/BrickToy_3D_LowPoly_FighterRobots_
 Assets/SciFiWarriorPBRHPPolyart
+/ProjectSettings/EditorBuildSettings.asset
+/ProjectSettings/ShaderGraphSettings.asset
 
 UserSettings/

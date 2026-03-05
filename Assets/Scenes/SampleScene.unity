@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -269,7 +270,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7775a2c892f5ea4f8ae402f20d499ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  cameraSpeed: 2
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5791e3404885da45ad126626862b1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFollow
+  target: {fileID: 1056368197}
+  followSpeed: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,8 +794,10 @@ GameObject:
   - component: {fileID: 1056368201}
   - component: {fileID: 1056368200}
   - component: {fileID: 1056368199}
+  - component: {fileID: 1056368204}
   - component: {fileID: 1056368198}
   - component: {fileID: 1056368202}
+  - component: {fileID: 1056368203}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -867,7 +883,7 @@ Transform:
   m_GameObject: {fileID: 1056368197}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -890,6 +906,46 @@ MonoBehaviour:
   bulletRemaining: 10
   magazine: 1
   recoveryTime: 3
+--- !u!114 &1056368203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056368197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea0ac62a881e7864bbc0b464c37d3f82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NejikoController
+  gravity: 20
+  speedZ: 5
+  speedJump: 8
+--- !u!143 &1056368204
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056368197}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.03
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1673210754
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,7 +1046,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   effectPrefab: {fileID: 6503668321523386183, guid: bfd64a9de980c964181c199c2bec0a03, type: 3}
   life: 5
-  damegeTime: 0.25
+  damageTime: 0.25
   damageBody: {fileID: 708344120}
   speed: 75
   amplitude: 1.5
