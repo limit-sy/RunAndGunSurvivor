@@ -12,7 +12,7 @@ public class PlayerFollow : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        diff = transform.position - transform.position;
+        diff = target.transform.position - transform.position;
     }
 
     // Update is called once per frame
