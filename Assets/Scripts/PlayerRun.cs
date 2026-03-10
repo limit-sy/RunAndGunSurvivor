@@ -34,8 +34,14 @@ public class PlayerRun : MonoBehaviour
     public float speedJump = 8.0f;  // ジャンプ力
     public float accelerationZ = 10.0f; // 前進加速力
 
+    [Header("ソードのスクリプト")]
+    public NormalSword normalSword;
+
     void OnMove(InputValue value)
     {
+        // NormalSwordスクリプトのisSword変数を見て攻撃中なら何もできない
+        if (normalSword.GetIsSword()) return;
+
         // すでに前に入力検知してインターバル中であれば何もしない
         if (resetIntervalCol == null)
         {
@@ -48,6 +54,9 @@ public class PlayerRun : MonoBehaviour
 
     void OnJump(InputValue value)
     {
+        // NormalSwordスクリプトのisSword変数を見て攻撃中なら何もできない
+        if (normalSword.GetIsSword()) return;
+
         // ジャンプに関するボタン検知をしたらジャンプメソッド
         Jump();
     }
@@ -62,6 +71,7 @@ public class PlayerRun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.gameState == GameState.stageclear || GameManager.gameState == GameState.result) return;
         // InputManagerシステム採用の場合
         //if (Input.GetKeyDown("left")) MoveToLeft();
         //if (Input.GetKeyDown("right")) MoveToRight();
@@ -169,10 +179,24 @@ public class PlayerRun : MonoBehaviour
         // 相手がEnemyなら
         if (hit.gameObject.tag == "Enemy")
         {
-            life--; // 体力が減る
+            LifeDown(); // 体力が減る
+            GetComponent<NormalShooter>().ShootPowerDown(); // 銃の威力を減らすメソッド
             recoverTime = StunDuration; // 定数の値にrecoverTimeがセッティング
 
-            Destroy(hit.gameObject);    // 相手を消滅
+            // 体力がなくなったらゲームオーバー
+            if (life <= 0) GameManager.gameState = GameState.gameover;
+
+            //Destroy(hit.gameObject);    // 相手を消滅
+            hit.gameObject.GetComponent<Wall>().CreateEffect();
+        }
+    }
+
+    // ゴールに触れたらステータスをゲームクリアに変更
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Goal")
+        {
+            GameManager.gameState = GameState.stageclear;
         }
     }
 
@@ -193,6 +217,16 @@ public class PlayerRun : MonoBehaviour
         {
             life = DefaultLife;
         }
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateLife(Life());
+    }
+
+    // 体力のダメージによる減少
+    public void LifeDown()
+    {
+        life--;
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateLife(Life());
     }
 
     // Playerを硬直させるべきかチェックするメソッド

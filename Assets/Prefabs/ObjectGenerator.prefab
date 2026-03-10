@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7499705983786181491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 161041324015012204}
+  - component: {fileID: 8207075264191696257}
+  - component: {fileID: 1673350626316825511}
+  m_Layer: 0
+  m_Name: ObjectGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &161041324015012204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7499705983786181491}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 60}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8207075264191696257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7499705983786181491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 109ecbd8cc5659143a03f3d56101311d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  goalPosition: 300
+  enemyObjects:
+  - {fileID: 5994595111847921743, guid: ed5bce72ad3b63140a37a1e569c5cb1a, type: 3}
+  itemObjects:
+  - {fileID: 7282549602314447587, guid: 4a1c6c788bbad8b47b0746583dd9300b, type: 3}
+  - {fileID: 7282549602314447587, guid: 5ec7159437469ae4bb614be70b3a04a0, type: 3}
+  - {fileID: 7282549602314447587, guid: e0b95bdb453b09743b5c2c2f44ef81d1, type: 3}
+  trapObjects:
+  - {fileID: 6367734748483862209, guid: b4e74be5c5e3b7d489330291b0cf4dd2, type: 3}
+  goalPrefab: {fileID: 2533327201015218599, guid: 9c24303bcd165a54a8d8a3e4c2bd130b, type: 3}
+  bulletManager: {fileID: 0}
+  maxEnemyIntervalTime: 3
+  maxItemIntervalTime: 8
+  maxTrapIntervalTime: 5
+--- !u!114 &1673350626316825511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7499705983786181491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5791e3404885da45ad126626862b1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerFollow
+  target: {fileID: 0}
+  followSpeed: 5
