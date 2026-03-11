@@ -8,7 +8,7 @@ public class PlayerRun : MonoBehaviour
     // 横移動のX軸の限界
     const int MinLane = -2;
     const int MaxLane = 2;
-    const float LaneWidth = 1.0f;
+    const float LaneWidth = 2.0f;
 
     // 体力の最大値
     const int DefaultLife = 3;
@@ -39,6 +39,18 @@ public class PlayerRun : MonoBehaviour
     [Header("ソードのスクリプト")]
     public NormalSword normalSword;
 
+    AudioSource[] playerAudio;
+    //足音判定
+    float footstepInterval = 0.3f; // 足音間隔
+    float footstepTimer; // 時間計測
+    [Header("SE音源")]
+    public AudioClip se_Walk;
+    public AudioClip se_Damage;
+    public AudioClip se_Explosion;
+    public AudioClip se_Jump;
+    public AudioClip se_Dash;
+    public AudioClip se_Reload;
+
     void OnMove(InputValue value)
     {
         // NormalSwordスクリプトのisSword変数を見て攻撃中なら何もできない
@@ -68,6 +80,7 @@ public class PlayerRun : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         animator = animeBody.GetComponent<Animator>();
+        playerAudio = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -125,6 +138,29 @@ public class PlayerRun : MonoBehaviour
 
         // 地面についていたら重力をリセット
         if (controller.isGrounded) moveDirection.y = 0;
+
+        // 足音メソッド
+        HandleFootsteps();
+    }
+
+    // 足音メソッド
+    void HandleFootsteps()
+    {
+        // 地面にいてプレイヤーが動いていれば
+        if (controller.isGrounded && moveDirection.z != 0)
+        {
+            footstepTimer += Time.deltaTime; // 時間計測
+
+            if (footstepTimer >= footstepInterval) // インターバルチェック
+            {
+                playerAudio[1].PlayOneShot(se_Walk);
+                footstepTimer = 0;
+            }
+        }
+        else // 動いていなければ時間計測リセット
+        {
+            footstepTimer = 0f;
+        }
     }
 
     public void MoveToLeft()
@@ -134,6 +170,7 @@ public class PlayerRun : MonoBehaviour
         // 地面にいる かつ targetがまだ最小でない
         if (controller.isGrounded && targetLane > MinLane)
         {
+            playerAudio[0].PlayOneShot(se_Dash);
             targetLane--;
             currentMoveInputX = 0;  // 何も入力していない状況にリセット
             // 次の入力検知を有効にするまでのインターバル
@@ -148,6 +185,7 @@ public class PlayerRun : MonoBehaviour
         // 地面にいる かつ targetがまだ最大でない
         if (controller.isGrounded && targetLane < MaxLane)
         {
+            playerAudio[0].PlayOneShot(se_Dash);
             targetLane++;
             currentMoveInputX = 0;  // 何も入力していない状況にリセット
             // 次の入力検知を有効にするまでのインターバル
@@ -171,6 +209,7 @@ public class PlayerRun : MonoBehaviour
         {
             moveDirection.y = speedJump;
             animator.SetTrigger("jump");
+            playerAudio[0].PlayOneShot(se_Jump);
         }
     }
 
@@ -182,6 +221,7 @@ public class PlayerRun : MonoBehaviour
         // 相手がEnemyなら
         if (hit.gameObject.tag == "Enemy")
         {
+            playerAudio[2].PlayOneShot(se_Damage);
             LifeDown(); // 体力が減る
             GetComponent<NormalShooter>().ShootPowerDown(); // 銃の威力を減らすメソッド
             recoverTime = StunDuration; // 定数の値にrecoverTimeがセッティング
@@ -196,10 +236,10 @@ public class PlayerRun : MonoBehaviour
                     isAnime = true;
                 }
             }
-
-            //Destroy(hit.gameObject);    // 相手を消滅
-            hit.gameObject.GetComponent<Wall>().CreateEffect();
             animator.SetTrigger("damage");
+            //Destroy(hit.gameObject);    // 相手を消滅
+
+            hit.gameObject.GetComponent<Wall>().CreateEffect();
         }
     }
 
@@ -213,7 +253,9 @@ public class PlayerRun : MonoBehaviour
             {
                 animator.SetTrigger("result");
                 isAnime = true;
+                playerAudio[0].PlayOneShot(se_Reload);
             }
+            Destroy(other.gameObject);  // ゴールしたらゴールオブジェクトを抹消
         }
     }
 

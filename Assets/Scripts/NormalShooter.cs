@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class NormalShooter : MonoBehaviour
 {
@@ -21,7 +22,13 @@ public class NormalShooter : MonoBehaviour
 
     [Header("ソードのスクリプト")]
     public NormalSword normalSword;
-    
+
+    bool inputAvail;
+
+    AudioSource[] playerAudio;
+    [Header("SE音源")]
+    public AudioClip se_Shot;
+
     //InputAction(Playerマップ)のAttackアクションがおされたら
     void OnAttack(InputValue value)
     {
@@ -39,18 +46,24 @@ public class NormalShooter : MonoBehaviour
             // 行き先が自由に記述できるようpublic変数を使っているので、NextSceneはstaticメソッドにできず、地道に呼び出し
             GameManager gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameManager>();
             gm.NextScene(gm.nextScene);
-            GameManager.RetryScene();
+            //Debug.Log("Next押した");
         }
         else
         {
-            Shoot();
+            if (inputAvail)
+            {
+                Shoot();
+            }
+
         }
     }
 
     void Shoot()
     {
-       if (bulletManager.GetBulletRemaining() > 0)
+        // 残数があれば
+        if (bulletManager.GetBulletRemaining() > 0)
         {
+            playerAudio[0].PlayOneShot(se_Shot);
             // プレハブの生成と生成情報の取得
             GameObject obj = Instantiate(
                 bulletPrefabs,  // 何を
@@ -79,6 +92,15 @@ public class NormalShooter : MonoBehaviour
     {
         // 指定したタグを持っているオブジェクトを取得
         bullets = GameObject.FindGameObjectWithTag("Bullets");
+
+        StartCoroutine(InputAvailCol());
+        playerAudio = GetComponents<AudioComponent>();
+    }
+
+    IEnumerator InputAvailCol()
+    {
+        yield return new WaitForSeconds(1.0f);
+        inputAvail = true;
     }
 
     // 威力を上げるメソッド
