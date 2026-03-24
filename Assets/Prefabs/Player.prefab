@@ -141,7 +141,7 @@ MonoBehaviour:
   gate: {fileID: 6077695008464536453}
   shootSpeed: 30
   normalSword: {fileID: 4661404626505694527}
-  se_Shot: {fileID: 0}
+  se_Shot: {fileID: 8300000, guid: 7a28da518a703f548a6ad906e658bd6f, type: 3}
 --- !u!114 &6883460891832438826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +158,7 @@ MonoBehaviour:
   magazine: 1
   recoveryTime: 3
   ui: {fileID: 0}
-  se_Reload: {fileID: 0}
+  se_Reload: {fileID: 8300000, guid: 9497fe6a3152761429b1f73d396b97a0, type: 3}
 --- !u!114 &1979377441721934335
 MonoBehaviour:
   m_ObjectHideFlags: 0

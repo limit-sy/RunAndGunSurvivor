@@ -94,7 +94,7 @@ public class NormalShooter : MonoBehaviour
         bullets = GameObject.FindGameObjectWithTag("Bullets");
 
         StartCoroutine(InputAvailCol());
-        playerAudio = GetComponents<AudioComponent>();
+        playerAudio = GetComponents<AudioSource>();
     }
 
     IEnumerator InputAvailCol()
