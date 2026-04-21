@@ -1,5 +1,8 @@
 # RunAndGunSurvivor
 
+![Unity](https://img.shields.io/badge/Unity-6000.3.5f2-black.svg?style=flat&logo=unity)
+![C#](https://img.shields.io/badge/C%23-10.0-blue.svg?style=flat&logo=csharp)
+
 ## プログラムの場所
 * Assets/Scriptsフォルダ・・・各スクリプト
 
