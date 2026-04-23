@@ -36,6 +36,16 @@ public class PlayerRun : MonoBehaviour
     public float speedJump = 8.0f;  // ジャンプ力
     public float accelerationZ = 10.0f; // 前進加速力
 
+    [Header("連続移動の間隔（秒）")]
+    public float moveInterval = 0.25f; // 0.25秒ごとに次のレーンへ（お好みで調整）
+    //bool canMove = true;              // 移動可能フラグ
+
+    [Header("スティック長押しリピートの設定")]
+    public float initialDelay = 0.4f; // 最初の1回目から2回目までの待ち時間
+    public float repeatInterval = 0.15f; // 2回目以降の連続移動の間隔
+    private float nextMoveTimer = 0f; // 次の移動を許可するまでのタイマー
+    private bool isContinuousMoving = false; // 連続移動モードに入っているか
+
     [Header("ソードのスクリプト")]
     public NormalSword normalSword;
 
@@ -92,16 +102,58 @@ public class PlayerRun : MonoBehaviour
         //if (Input.GetKeyDown("right")) MoveToRight();
         //if (Input.GetKeyDown("space")) Jump();
 
-        // 左が押されていたら
-        if (currentMoveInputX < 0.0f)
+        // --- 連続移動リピートのアルゴリズム ---
+        if (!IsStun() && Mathf.Abs(currentMoveInputX) > 0.5f) // スティックが倒されている
         {
-            MoveToLeft();
+            if (Time.time >= nextMoveTimer)
+            {
+                // 左が押されていたら
+                if (currentMoveInputX < -0.5f)
+                {
+                    MoveToLeft();
+                }
+                // 右が押されていたら
+                if (currentMoveInputX > 0.5f)
+                {
+
+                    MoveToRight();
+                }
+
+                // 次のタイマーを設定
+                if (!isContinuousMoving)
+                {
+                    // 初回の移動直後：長めの待ち時間を設定
+                    nextMoveTimer = Time.time + initialDelay;
+                    isContinuousMoving = true;
+                }
+                else
+                {
+                    // 2回目以降の移動直後：短い間隔を設定
+                    nextMoveTimer = Time.time + repeatInterval;
+                }
+            }
         }
-        // 右が押されていたら
-        if (currentMoveInputX > 0.0f)
+        else
         {
-            MoveToRight();
+            // スティックを離したらリセット
+            isContinuousMoving = false;
+            nextMoveTimer = 0f;
         }
+
+        //if (canMove && !IsStun())
+        //{
+            // 左が押されていたら
+        //    if (currentMoveInputX < -0.5f)
+        //    {
+        //        MoveToLeft();
+        //    }
+            // 右が押されていたら
+        //    if (currentMoveInputX > 0.5f)
+        //    {
+        //
+        //        MoveToRight();
+        //    }
+        //}
 
         // 硬直フラグをチェック
         if (IsStun())
@@ -172,9 +224,10 @@ public class PlayerRun : MonoBehaviour
         {
             playerAudio[0].PlayOneShot(se_Dash);
             targetLane--;
-            currentMoveInputX = 0;  // 何も入力していない状況にリセット
-            // 次の入力検知を有効にするまでのインターバル
-            resetIntervalCol = StartCoroutine(ResetIntervalCol());
+
+            //currentMoveInputX = 0;  // 何も入力していない状況にリセット
+            //// 次の入力検知を有効にするまでのインターバル
+            //resetIntervalCol = StartCoroutine(ResetIntervalCol());
         }
     }
 
@@ -187,10 +240,17 @@ public class PlayerRun : MonoBehaviour
         {
             playerAudio[0].PlayOneShot(se_Dash);
             targetLane++;
-            currentMoveInputX = 0;  // 何も入力していない状況にリセット
-            // 次の入力検知を有効にするまでのインターバル
-            resetIntervalCol = StartCoroutine(ResetIntervalCol());
+
+            //currentMoveInputX = 0;  // 何も入力していない状況にリセット
+            //// 次の入力検知を有効にするまでのインターバル
+            //resetIntervalCol = StartCoroutine(ResetIntervalCol());
         }
+    }
+
+    IEnumerator ResetMoveInterval()
+    {
+        yield return new WaitForSeconds(moveInterval);
+        //canMove = true;
     }
 
     IEnumerator ResetIntervalCol()
